@@ -1,11 +1,8 @@
-psutil
-numpy
-pandas
-streamlit
-rapidfuzz
 streamlit
 pandas
 numpy
 openpyxl
 xlsxwriter
+rapidfuzz
+psutil
 scikit-learn
