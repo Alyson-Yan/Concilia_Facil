@@ -3,3 +3,9 @@ numpy
 pandas
 streamlit
 rapidfuzz
+streamlit
+pandas
+numpy
+openpyxl
+xlsxwriter
+scikit-learn
