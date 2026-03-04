@@ -17,4 +17,4 @@
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/concilia_facil.git
+   git clone https://github.com/Alyson-Yan/concilia_facil.git
