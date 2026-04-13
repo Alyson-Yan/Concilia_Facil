@@ -468,12 +468,27 @@ def main():
         def marcar_e_filtrar_chaves_utilizadas(df_erp, df_conciliado):
             """
             """
-
             # Normaliza os valores para garantir comparação precisa
-            df_erp["Chave"] = pd.to_numeric(df_erp["Chave"], errors="coerce").astype("string")
-            df_conciliado["Chave ERP"] = pd.to_numeric(df_conciliado["Chave ERP"], errors="coerce").astype("string")
+            # - Trata como string (preserva valores não-numéricos)
+            # - Remove espaços em branco e sufixo '.0' gerado por conversões
+            # - Converte representações 'nan' / 'None' / '' para pd.NA
+            df_erp["Chave"] = (
+                df_erp["Chave"].astype(str)
+                .str.strip()
+                .str.replace(r"\.0$", "", regex=True)
+                .replace({"nan": pd.NA, "None": pd.NA, "": pd.NA})
+                .astype("string")
+            )
 
-            # Coleta as chaves que já foram utilizadas
+            df_conciliado["Chave ERP"] = (
+                df_conciliado["Chave ERP"].astype(str)
+                .str.strip()
+                .str.replace(r"\.0$", "", regex=True)
+                .replace({"nan": pd.NA, "None": pd.NA, "": pd.NA})
+                .astype("string")
+            )
+
+            # Coleta as chaves que já foram utilizadas (ignorando NA)
             chaves_utilizadas = df_conciliado["Chave ERP"].dropna().unique()
 
             # Marca no df_erp quais foram utilizadas
@@ -481,7 +496,6 @@ def main():
 
             # Filtra as que ainda estão disponíveis para nova conciliação
             df_erp_disponivel = df_erp[~df_erp["Usada"]].copy()
-
 
             return df_erp, df_erp_disponivel
 

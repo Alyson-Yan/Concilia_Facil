@@ -2,7 +2,6 @@ import streamlit as st
 import os
 import sys
 from enum import Enum
-import psutil
 # Configuração da página com mais opções
 st.set_page_config(
     page_title="Sistema de Conciliação Bancária",
@@ -70,7 +69,8 @@ class Banco(Enum):
     """Enum para os bancos disponíveis"""
     SANTANDER = "santander"
     CIELO = "cielo"
-    CREDSHOP = "credshop" 
+    CREDSHOP = "credshop"
+    PAGBANK = "pagbank"
 
 
 def main():
@@ -133,6 +133,14 @@ def mostrar_tela_inicial():
             st.session_state.banco_selecionado = Banco.CREDSHOP.value
             st.rerun()
 
+    # PagBank
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        st.image(caminho_absoluto_relativo("logos/pagbank.png"), width=70)
+    with col2:
+        if st.button("💳 PagBank", key="btn_pagbank", use_container_width=True):
+            st.session_state.banco_selecionado = Banco.PAGBANK.value
+            st.rerun()
     st.info("Selecione um banco para iniciar o processo de conciliação.")
 
 
@@ -157,11 +165,16 @@ def carregar_modulo_banco():
             from credshop import main as credshop_main
             credshop_main()
 
+        elif st.session_state.banco_selecionado == Banco.PAGBANK.value:
+            from pagbank import main as pagbank_main
+            pagbank_main()
+            
     except ImportError as e:
         st.error(f"Erro ao carregar módulo: {str(e)}. Certifique-se de que o arquivo do banco existe (ex: santander.py).")
         resetar_app()
 
 def resetar_app():
+    st.session_state.clear()
     """Reseta o aplicativo para o estado inicial"""
     # Guarda o valor do banco selecionado antes de limpar, se necessário
     banco_selecionado_antes = st.session_state.get('banco_selecionado', None)
