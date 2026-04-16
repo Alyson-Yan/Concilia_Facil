@@ -5,7 +5,7 @@ from enum import Enum
 import psutil
 # Configuração da página com mais opções
 st.set_page_config(
-    page_title="DESENVOLVIMENTO - Conciliação Bancária",
+    page_title="Conciliação Bancária",
     layout="centered",
     page_icon="🏦",
     initial_sidebar_state="expanded"
